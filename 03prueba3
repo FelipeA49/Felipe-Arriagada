@@ -1,0 +1,113 @@
+import csv
+lista=[]
+
+def menu():
+    print("1.- agregar plan")
+    print("2.- listar planes")
+    print("3.- eliminar plan por id")
+    print("4.- generar csv")
+    print("5.- cargar csv")
+    print("6.- estadisticas")
+    print("0.- salir")
+    print("")
+
+def agregar ():
+    id_plan =int(input("ingrese id : "))
+    nombre =input("ingrese nombre : ")
+    porcenta_efec =int(input("ingrese porcentaje de efectividad : "))
+    categoria_inter =input("ingrese categoria interna")
+    if porcenta_efec <=100:
+        valido="porcentaje validado"
+
+    elif porcenta_efec >100:
+        valido="porcentaje invalido"
+
+    planes=[id_plan,nombre,porcenta_efec,categoria_inter]
+
+    lista.append(planes)
+
+def listar():
+    for x in lista:
+        print("id: ",x[0],"nombre: ",x[1],"porcentaje efectividad: ",x[2],"categoria interna: ",x[3])
+
+def validar():
+    preguntar=input("¿esta seguro de eliminar este plan? (si/no): ").lower()
+    if preguntar=="si" or preguntar=="s":
+        lista.remove(x)
+        print("plan eliminado correctamente")
+    else:
+        print("plan no eliminado")
+
+def estadisticas():
+    porcen_promedio=0
+    porcen_alto=0
+    for x in lista:
+        porcenta_efec=int(x[2])
+        porcen_promedio=porcen_promedio+porcenta_efec
+        if porcenta_efec>porcen_alto:
+            porcen_alto=porcenta_efec
+    cantidad=len(lista)
+    promedio=porcen_promedio/cantidad
+    print("porcentaje de efectividad promedio",promedio)
+    print("valor de porcentaje de efectividad mas alto",porcen_alto)
+
+def generar():
+    with open("plan.csv","w",newline="")as archivo:
+        escribircsv=csv.writer(archivo)
+        escribircsv.writerow(["id","nombre","porcentaje efectividad","categoria interna"])
+        escribircsv.writerows(lista)
+        print("archivo guardado correctamente")
+
+def cargar():
+    lista.clear()
+    with open ("plan.csv","r",newline="")as archivo:
+        leercsv=csv.reader(archivo)
+        for x in leercsv:
+            lista.append(x)
+    lista.pop(0)
+    for x in lista:
+        print("id: ",x[0],"nombre: ",x[1],"porcentaje efectividad: ",x[2],"categoria interna: ",x[3])
+
+while True:
+    menu()
+    op=int(input("ingrese una opcion : \n"))
+    if op==1:
+        print(" -.- agregar plan -.-")
+        agregar()
+
+    elif op==2:
+        print("-.- listar planes -.-")
+        listar()
+
+    elif op==3:
+        print("-.- eliminar plan por id -.-")
+        id_ide=int(input("ingrese id : "))
+        for x in lista:
+            id_plan=int(x[0])
+            if id_ide==id_plan:
+                print(" id encontrado")
+                print("id: ",x[0],"nombre: ",x[1],"porcentaje efectividad: ",x[2],"categoria interna: ",x[3])
+                validar()
+                break
+    elif op==4:
+         print("-.- generar bbdd -.-")
+         generar()
+            
+        
+        
+
+    elif op==5:
+        print("-.- cargar bbdd -.-")
+        cargar()
+    
+
+    elif op==6:
+        print("-.- estadisticas -.-")
+        estadisticas()
+        
+
+    elif op==0:
+        print(" saliendo ...")
+
+    else:
+        print("seleccione una opcion valida")
